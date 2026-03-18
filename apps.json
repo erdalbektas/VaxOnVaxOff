@@ -1,0 +1,30 @@
+{
+  "$schema": "https://wvw.dev/apps.schema.json",
+  "store": {
+    "name": "Erdal Bektas's Apps",
+    "developer": "erdalbektas",
+    "tagline": "A collection of vibe-coded tools and toys.",
+    "github": "https://github.com/erdalbektas"
+  },
+  "categories": [
+    { "id": "productivity", "name": "Productivity" },
+    { "id": "utilities", "name": "Utilities" }
+  ],
+  "apps": [
+    {
+      "id": "vaxonvaxoff",
+      "name": "VaxOnVaxOff",
+      "subtitle": "Your personal task planning sensei.",
+      "description": "A task planning application inspired by Mr. Miyagi's wisdom.",
+      "longDescription": "Welcome to VaxOnVaxOff, your personal task planning sensei. Like Mr. Miyagi teaching Daniel-san, this app helps you organize your training (work), schedule your lessons (tasks), and achieve balance in your dojo (life).",
+      "icon": "https://raw.githubusercontent.com/erdalbektas/VaxOnVaxOff/main/public/favicon.svg",
+      "category": ["productivity", "utilities"],
+      "platform": "Web",
+      "price": "Free",
+      "github": "https://github.com/erdalbektas/VaxOnVaxOff",
+      "screenshots": [
+        "https://raw.githubusercontent.com/erdalbektas/VaxOnVaxOff/main/src/assets/hero.png"
+      ]
+    }
+  ]
+}
