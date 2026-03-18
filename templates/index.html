@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaxOnVaxOff - Your Task Sensei</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #58A6FF;
+            --color-primary-hover: #79B8FF;
+            --color-primary-muted: rgba(88, 166, 255, 0.15);
+            
+            --bg-primary: #0D1117;
+            --bg-secondary: #161B22;
+            --bg-tertiary: #1C2128;
+            --bg-elevated: #21262D;
+            
+            --border-default: #30363D;
+            --border-muted: #21262D;
+            --border-emphasis: #484F58;
+            
+            --text-primary: #E6EDF3;
+            --text-secondary: #8B949E;
+            --text-tertiary: #6E7681;
+            --text-inverse: #0D1117;
+            
+            --color-success: #238636;
+            --color-success-bg: rgba(35, 134, 54, 0.15);
+            --color-warning: #D29922;
+            --color-warning-bg: rgba(210, 153, 34, 0.15);
+            --color-danger: #F85149;
+            --color-danger-bg: rgba(248, 81, 73, 0.15);
+            
+            --importance-high: #F85149;
+            --importance-medium: #D29922;
+            --importance-low: #238636;
+            
+            --font-sans: 'IBM Plex Sans', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+            --shadow-glow-primary: 0 0 20px rgba(88, 166, 255, 0.3);
+            --radius-sm: 4px;
+            --radius-md: 6px;
+            --radius-lg: 8px;
+            --radius-xl: 12px;
+            --transition-fast: 150ms ease;
+            --transition-normal: 200ms ease;
+            
+            --sidebar-width: 260px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-default);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 100;
+            transition: transform var(--transition-normal);
+        }
+
+        .sidebar-header {
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+        }
+
+        .logo-text {
+            font-family: var(--font-mono);
+            font-size: var(--text-lg);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+            color: var(--text-primary);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: var(--space-4);
+            overflow-y: auto;
+        }
+
+        .nav-section {
+            margin-bottom: var(--space-6);
+        }
+
+        .nav-section-title {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: var(--space-2) var(--space-3);
+            margin-bottom: var(--space-2);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .nav-item.active {
+            background: var(--color-primary-muted);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--color-primary);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-label {
+            flex: 1;
+            font-size: var(--text-sm);
+            font-weight: 500;
+        }
+
+        .nav-badge {
+            background: var(--bg-elevated);
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
+        }
+
+        .nav-item.active .nav-badge {
+            background: var(--color-primary);
+            color: var(--text-inverse);
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-default);
+            padding: var(--space-4) var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .content-title {
+            font-family: var(--font-mono);
+            font-size: var(--text-xl);
+            font-weight: 600;
+        }
+
+        .content-body {
+            flex: 1;
+            padding: var(--space-6);
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn var(--transition-normal);
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            padding: var(--space-5);
+            margin-bottom: var(--space-4);
+            transition: all var(--transition-normal);
+        }
+
+        .card:hover {
+            border-color: var(--border-emphasis);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-4);
+        }
+
+        .card-title {
+            font-family: var(--font-mono);
+            font-size: var(--text-base);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-4);
+        }
+
+        .form-label {
+            display: block;
+            font-size: var(--text-xs);
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-2);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: var(--space-3);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: var(--text-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px var(--color-primary-muted);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238B949E' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: var(--font-sans);
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: var(--text-inverse);
+            box-shadow: var(--shadow-glow-primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border-default);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--border-emphasis);
+        }
+
+        .btn-success {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #2ea043;
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: var(--color-danger);
+            border: 1px solid var(--color-danger);
+        }
+
+        .btn-danger:hover {
+            background: var(--color-danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: var(--space-1) var(--space-3);
+            font-size: var(--text-xs);
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-3);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: var(--text-sm);
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--color-primary);
+        }
+
+        .checkbox-item.checked {
+            background: var(--color-primary-muted);
+            border-color: var(--color-primary);
+        }
+
+        .checkbox-item input {
+            accent-color: var(--color-primary);
+        }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-3);
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-3);
+        }
+
+        .toggle-group label {
+            font-size: var(--text-sm);
+            color: var(--text-primary);
+        }
+
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: var(--border-default);
+            border-radius: 24px;
+            transition: var(--transition-fast);
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            transition: var(--transition-fast);
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: var(--color-primary);
+        }
+
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(20px);
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-3) var(--space-4);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-2);
+            transition: all var(--transition-fast);
+        }
+
+        .list-item:hover {
+            border-color: var(--border-emphasis);
+            transform: translateX(4px);
+        }
+
+        .list-item-info {
+            flex: 1;
+        }
+
+        .list-item-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .list-item-meta {
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: var(--space-2);
+        }
+
+        .btn-icon {
+            padding: var(--space-2);
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .btn-icon:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .btn-icon.danger:hover {
+            color: var(--color-danger);
+            background: var(--color-danger-bg);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: var(--radius-sm);
+            letter-spacing: 0.03em;
+        }
+
+        .badge-high {
+            background: rgba(248, 81, 73, 0.15);
+            color: var(--importance-high);
+        }
+
+        .badge-medium {
+            background: rgba(210, 153, 34, 0.15);
+            color: var(--importance-medium);
+        }
+
+        .badge-low {
+            background: rgba(35, 134, 54, 0.15);
+            color: var(--importance-low);
+        }
+
+        .task-checkbox {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            cursor: pointer;
+        }
+
+        .task-checkbox input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--color-success);
+            cursor: pointer;
+        }
+
+        .list-item.completed {
+            opacity: 0.6;
+        }
+
+        .list-item.completed .list-item-name {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .show-more {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-3);
+            color: var(--color-primary);
+            cursor: pointer;
+            font-size: var(--text-sm);
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            border-radius: var(--radius-md);
+            margin-top: var(--space-2);
+        }
+
+        .show-more:hover {
+            background: var(--color-primary-muted);
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-10);
+            text-align: center;
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: var(--space-4);
+            opacity: 0.4;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--space-4);
+        }
+
+        .calendar-day {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            animation: slideUp var(--transition-normal);
+        }
+
+        .calendar-day.current-day {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-glow-primary);
+        }
+
+        .calendar-day-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-3) var(--space-4);
+            background: var(--color-primary-muted);
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        .calendar-day-header .date {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            font-size: var(--text-sm);
+        }
+
+        .calendar-day-header .hours {
+            font-size: var(--text-xs);
+            color: var(--color-primary);
+            font-weight: 500;
+            background: var(--bg-primary);
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+        }
+
+        .calendar-tasks {
+            padding: var(--space-3);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .calendar-task {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: var(--space-3);
+            padding: var(--space-3);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-2);
+            border-left: 3px solid var(--color-primary);
+            transition: all var(--transition-fast);
+        }
+
+        .calendar-task:hover {
+            transform: translateX(4px);
+        }
+
+        .calendar-task.priority-high { border-left-color: var(--importance-high); }
+        .calendar-task.priority-medium { border-left-color: var(--importance-medium); }
+        .calendar-task.priority-low { border-left-color: var(--importance-low); }
+
+        .calendar-task.current-time {
+            border: 2px solid var(--color-primary);
+            box-shadow: var(--shadow-glow-primary);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .calendar-task.completed {
+            opacity: 0.6;
+        }
+
+        .calendar-task.completed .task-name {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .calendar-task .task-info {
+            flex: 1;
+        }
+
+        .calendar-task .task-name {
+            font-weight: 500;
+            font-size: var(--text-sm);
+            margin-bottom: 2px;
+        }
+
+        .calendar-task .task-project {
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
+        }
+
+        .calendar-task .task-time {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--color-primary);
+            white-space: nowrap;
+        }
+
+        .calendar-task .task-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .btn-complete {
+            background: var(--color-success);
+            color: white;
+            padding: var(--space-1) var(--space-2);
+            font-size: 10px;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+        }
+
+        .btn-complete:hover {
+            background: #2ea043;
+        }
+
+        .overtime-banner {
+            background: linear-gradient(135deg, var(--color-warning-bg) 0%, var(--color-danger-bg) 100%);
+            border: 1px solid var(--color-warning);
+            border-radius: var(--radius-xl);
+            padding: var(--space-4) var(--space-5);
+            margin-bottom: var(--space-5);
+            animation: slideUp var(--transition-normal);
+        }
+
+        .overtime-banner h3 {
+            color: var(--color-warning);
+            font-size: var(--text-base);
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .overtime-banner p {
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+        }
+
+        .overtime-banner .hours {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--color-danger);
+        }
+
+        .stats-row {
+            display: flex;
+            gap: var(--space-4);
+            margin-bottom: var(--space-5);
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-default);
+        }
+
+        .stat-label {
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-family: var(--font-mono);
+            font-size: var(--text-xl);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-default);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-tertiary);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-10);
+            color: var(--text-secondary);
+        }
+
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-default);
+            border-top-color: var(--color-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: var(--space-3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn var(--transition-fast);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp var(--transition-normal);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-4) var(--space-5);
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        .modal-title {
+            font-family: var(--font-mono);
+            font-size: var(--text-lg);
+            font-weight: 600;
+        }
+
+        .modal-body {
+            padding: var(--space-5);
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: var(--space-3);
+            justify-content: flex-end;
+            padding: var(--space-4) var(--space-5);
+            border-top: 1px solid var(--border-default);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: var(--space-4);
+            left: var(--space-4);
+            z-index: 200;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">🏯</div>
+                <span class="logo-text">VaxOnVaxOff</span>
+            </div>
+            <div style="font-size: 10px; color: var(--text-tertiary); margin-top: 4px; font-style: italic;">
+                "Wax on, wax off." - Mr. Miyagi
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Dashboard</span>
+                </div>
+                <div class="nav-item" data-page="calendar" onclick="showPage('calendar')">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-label">Calendar</span>
+                    <span class="nav-badge" id="calendar-badge">→</span>
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Manage</div>
+                <div class="nav-item" data-page="projects" onclick="showPage('projects')">
+                    <span class="nav-icon">📁</span>
+                    <span class="nav-label">Dojos</span>
+                    <span class="nav-badge" id="projects-count">0</span>
+                </div>
+                <div class="nav-item" data-page="tasks" onclick="showPage('tasks')">
+                    <span class="nav-icon">✓</span>
+                    <span class="nav-label">Training</span>
+                    <span class="nav-badge" id="tasks-count">0</span>
+                </div>
+                <div class="nav-item" data-page="schedule" onclick="showPage('schedule')">
+                    <span class="nav-icon">⏰</span>
+                    <span class="nav-label">Dojo Hours</span>
+                </div>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <section class="page-section active" id="page-dashboard">
+            <header class="content-header">
+                <h1 class="content-title">🏯 Dojo Command Center</h1>
+            </header>
+            <div class="content-body">
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Projects</div>
+                        <div class="stat-value" id="stat-projects">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Total Tasks</div>
+                        <div class="stat-value" id="stat-tasks">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Completed</div>
+                        <div class="stat-value" id="stat-completed">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Pending</div>
+                        <div class="stat-value" id="stat-pending">0</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span>⚔️</span> Sensei's Orders</h2>
+                    </div>
+                    <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="showPage('projects'); document.getElementById('projectName').focus();">+ Open New Dojo</button>
+                        <button class="btn btn-primary" onclick="showPage('tasks'); document.getElementById('taskName').focus();">+ Add Training</button>
+                        <button class="btn btn-success" onclick="showPage('calendar'); generateCalendar();">🥋 Get Training Schedule</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span>📅</span> Today's Schedule</h2>
+                    </div>
+                    <div id="dashboard-calendar">
+                        <div class="empty-state">
+                            <div class="icon">📅</div>
+                            <p>Generate a calendar to see today's schedule</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page-section" id="page-projects">
+            <header class="content-header">
+                <h1 class="content-title">🏯 Your Dojos</h1>
+            </header>
+            <div class="content-body">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span>➕</span> Open New Dojo</h2>
+                    </div>
+                    <div style="display: flex; gap: var(--space-3);">
+                        <input type="text" id="projectName" class="form-input" placeholder="Project name..." style="flex: 1;">
+                        <button class="btn btn-primary" onclick="addProject()">Add Project</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span>📁</span> Your Dojos</h2>
+                    </div>
+                    <div id="projectList">
+                        <div class="empty-state">
+                            <div class="icon">📂</div>
+                            <p>No projects yet. Add one to get started.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page-section" id="page-tasks">
+            <header class="content-header">
+                <h1 class="content-title">⚔️ Training Sessions</h1>
+            </header>
+            <div class="content-body">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span>➕</span> Add Training Session</h2>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Project</label>
+                        <select id="taskProject" class="form-input form-select">
+                            <option value="">Select a project</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Task Name</label>
+                        <input type="text" id="taskName" class="form-input" placeholder="Enter task name...">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Deadline</label>
+                            <input type="date" id="taskDeadline" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Importance</label>
+                            <select id="taskImportance" class="form-input form-select">
+                                <option value="high">High</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Estimated Hours</label>
+                        <input type="number" id="taskHours" class="form-input" placeholder="e.g., 2.5" min="0.5" max="24" step="0.5">
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="addTask()" id="addTaskBtn" disabled>Add Task</button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span>✓</span> Your Training</h2>
+                    </div>
+                    <div id="taskList">
+                        <div class="empty-state">
+                            <div class="icon">📋</div>
+                            <p>No tasks yet. Add tasks to your projects.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page-section" id="page-schedule">
+            <header class="content-header">
+                <h1 class="content-title">⏰ Dojo Hours</h1>
+            </header>
+            <div class="content-body">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span>📅</span> Work Days</h2>
+                    </div>
+                    <div class="checkbox-group" id="workDays">
+                        <label class="checkbox-item" data-day="Mon"><input type="checkbox" value="Mon"> Mon</label>
+                        <label class="checkbox-item" data-day="Tue"><input type="checkbox" value="Tue"> Tue</label>
+                        <label class="checkbox-item" data-day="Wed"><input type="checkbox" value="Wed"> Wed</label>
+                        <label class="checkbox-item" data-day="Thu"><input type="checkbox" value="Thu"> Thu</label>
+                        <label class="checkbox-item" data-day="Fri"><input type="checkbox" value="Fri"> Fri</label>
+                        <label class="checkbox-item" data-day="Sat"><input type="checkbox" value="Sat"> Sat</label>
+                        <label class="checkbox-item" data-day="Sun"><input type="checkbox" value="Sun"> Sun</label>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span>⏰</span> Work Hours</h2>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Start Time</label>
+                            <input type="time" id="workStart" class="form-input" value="09:00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">End Time</label>
+                            <input type="time" id="workEnd" class="form-input" value="17:00">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span>🍽️</span> Lunch Break</h2>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Start</label>
+                            <input type="time" id="lunchStart" class="form-input" value="12:00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">End</label>
+                            <input type="time" id="lunchEnd" class="form-input" value="13:00">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="toggle-group">
+                        <label>Enable Overtime</label>
+                        <label class="toggle">
+                            <input type="checkbox" id="overtimeEnabled">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <button class="btn btn-success btn-block" onclick="saveSchedule(); showPage('calendar'); generateCalendar();">🥋 Save & Get Schedule</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="page-section" id="page-calendar">
+            <header class="content-header">
+                <h1 class="content-title">📅 Training Schedule</h1>
+                <button class="btn btn-primary" onclick="generateCalendar()">🔄 Refresh</button>
+            </header>
+            <div class="content-body">
+                <div id="calendarResult">
+                    <div class="empty-state">
+                        <div class="icon">📅</div>
+                        <p>Add projects and tasks, then generate your calendar.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Edit Task Modal -->
+        <div id="editTaskModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Edit Task</h2>
+                    <button class="btn-icon" onclick="closeEditTaskModal()">✕</button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editTaskId">
+                    <div class="form-group">
+                        <label class="form-label">Project</label>
+                        <select id="editTaskProject" class="form-input form-select">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Task Name</label>
+                        <input type="text" id="editTaskName" class="form-input">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Deadline</label>
+                            <input type="date" id="editTaskDeadline" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Importance</label>
+                            <select id="editTaskImportance" class="form-input form-select">
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Estimated Hours</label>
+                        <input type="number" id="editTaskHours" class="form-input" min="0.5" max="24" step="0.5">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeEditTaskModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveEditedTask()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = '/api/';
+        let projects = [];
+        let tasks = [];
+        let workSchedule = null;
+        
+        const ITEMS_PER_PAGE = 5;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProjects();
+            loadTasks();
+            loadSchedule();
+            loadTodaySchedule();
+            
+            document.querySelectorAll('.checkbox-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (e.target.tagName !== 'INPUT') {
+                        const checkbox = item.querySelector('input');
+                        checkbox.checked = !checkbox.checked;
+                    }
+                    item.classList.toggle('checked', item.querySelector('input').checked);
+                });
+            });
+            
+            const defaultDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+            defaultDays.forEach(day => {
+                const item = document.querySelector(`[data-day="${day}"]`);
+                if (item) {
+                    item.classList.add('checked');
+                    item.querySelector('input').checked = true;
+                }
+            });
+            
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('taskDeadline').min = today;
+        });
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById('page-' + pageId).classList.add('active');
+            document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+            
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+            
+            if (pageId === 'dashboard') {
+                loadTodaySchedule();
+            }
+            
+            if (pageId === 'calendar' && tasks.length > 0) {
+                generateCalendar();
+            }
+        }
+
+        async function loadProjects() {
+            try {
+                const response = await fetch(API_URL + 'projects/');
+                projects = await response.json();
+                renderProjects();
+                updateProjectSelect();
+                updateCounts();
+            } catch (error) {
+                console.error('Error loading projects:', error);
+            }
+        }
+
+        async function loadTasks() {
+            try {
+                const response = await fetch(API_URL + 'tasks/');
+                tasks = await response.json();
+                renderTasks();
+                updateCounts();
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+            }
+        }
+
+        async function loadSchedule() {
+            try {
+                const response = await fetch(API_URL + 'schedule/');
+                const data = await response.json();
+                if (data.length > 0) {
+                    workSchedule = data[0];
+                    applyScheduleToForm();
+                }
+            } catch (error) {
+                console.error('Error loading schedule:', error);
+            }
+        }
+
+        function applyScheduleToForm() {
+            if (!workSchedule) return;
+            
+            document.querySelectorAll('.checkbox-item').forEach(item => {
+                const day = item.dataset.day;
+                const checked = workSchedule.work_days.includes(day);
+                item.classList.toggle('checked', checked);
+                item.querySelector('input').checked = checked;
+            });
+            
+            document.getElementById('workStart').value = workSchedule.work_start;
+            document.getElementById('workEnd').value = workSchedule.work_end;
+            document.getElementById('lunchStart').value = workSchedule.lunch_start || '12:00';
+            document.getElementById('lunchEnd').value = workSchedule.lunch_end || '13:00';
+            document.getElementById('overtimeEnabled').checked = workSchedule.overtime_enabled;
+        }
+
+        function updateCounts() {
+            document.getElementById('projects-count').textContent = projects.length;
+            document.getElementById('tasks-count').textContent = tasks.length;
+            document.getElementById('stat-projects').textContent = projects.length;
+            document.getElementById('stat-tasks').textContent = tasks.length;
+            
+            const completed = tasks.filter(t => t.completed).length;
+            document.getElementById('stat-completed').textContent = completed;
+            document.getElementById('stat-pending').textContent = tasks.length - completed;
+        }
+
+        async function addProject() {
+            const name = document.getElementById('projectName').value.trim();
+            if (!name) return;
+
+            try {
+                const response = await fetch(API_URL + 'projects/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name })
+                });
+                
+                if (response.ok) {
+                    document.getElementById('projectName').value = '';
+                    loadProjects();
+                }
+            } catch (error) {
+                console.error('Error adding project:', error);
+            }
+        }
+
+        async function deleteProject(id) {
+            try {
+                await fetch(API_URL + 'projects/' + id + '/', { method: 'DELETE' });
+                loadProjects();
+                loadTasks();
+            } catch (error) {
+                console.error('Error deleting project:', error);
+            }
+        }
+
+        function renderProjects() {
+            const container = document.getElementById('projectList');
+            
+            if (projects.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📂</div>
+                        <p>No projects yet. Add one to get started.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const displayProjects = projects.slice(0, ITEMS_PER_PAGE);
+            const hasMore = projects.length > ITEMS_PER_PAGE;
+            
+            container.innerHTML = displayProjects.map(p => `
+                <div class="list-item">
+                    <div class="list-item-info">
+                        <div class="list-item-name">${p.name}</div>
+                        <div class="list-item-meta">Created: ${new Date(p.created_at).toLocaleDateString()}</div>
+                    </div>
+                    <div class="list-item-actions">
+                        <button class="btn-icon danger" onclick="deleteProject(${p.id})" title="Delete">🗑️</button>
+                    </div>
+                </div>
+            `).join('') + (hasMore ? `<div class="show-more" onclick="renderAllProjects()">Show all ${projects.length} projects →</div>` : '');
+        }
+
+        function renderAllProjects() {
+            const container = document.getElementById('projectList');
+            container.innerHTML = projects.map(p => `
+                <div class="list-item">
+                    <div class="list-item-info">
+                        <div class="list-item-name">${p.name}</div>
+                        <div class="list-item-meta">Created: ${new Date(p.created_at).toLocaleDateString()}</div>
+                    </div>
+                    <div class="list-item-actions">
+                        <button class="btn-icon danger" onclick="deleteProject(${p.id})" title="Delete">🗑️</button>
+                    </div>
+                </div>
+            `).join('') + `<div class="show-more" onclick="renderProjects()">Show less ↑</div>`;
+        }
+
+        function updateProjectSelect() {
+            const select = document.getElementById('taskProject');
+            select.innerHTML = projects.length > 0 
+                ? '<option value="">Select a project</option>' + 
+                  projects.map(p => `<option value="${p.id}">${p.name}</option>`).join('')
+                : '<option value="">Select a project first</option>';
+            
+            document.getElementById('addTaskBtn').disabled = projects.length === 0;
+        }
+
+        document.getElementById('taskProject').addEventListener('change', (e) => {
+            document.getElementById('addTaskBtn').disabled = !e.target.value;
+        });
+
+        async function addTask() {
+            const projectId = document.getElementById('taskProject').value;
+            const name = document.getElementById('taskName').value.trim();
+            const deadline = document.getElementById('taskDeadline').value;
+            const importance = document.getElementById('taskImportance').value;
+            const workHours = parseFloat(document.getElementById('taskHours').value);
+
+            if (!projectId || !name || !deadline || !workHours) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            try {
+                const response = await fetch(API_URL + 'tasks/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        project: parseInt(projectId),
+                        name,
+                        deadline,
+                        importance,
+                        work_hours: workHours
+                    })
+                });
+                
+                if (response.ok) {
+                    document.getElementById('taskName').value = '';
+                    document.getElementById('taskHours').value = '';
+                    loadTasks();
+                }
+            } catch (error) {
+                console.error('Error adding task:', error);
+            }
+        }
+
+        async function deleteTask(id) {
+            try {
+                await fetch(API_URL + 'tasks/' + id + '/', { method: 'DELETE' });
+                loadTasks();
+            } catch (error) {
+                console.error('Error deleting task:', error);
+            }
+        }
+
+        async function toggleTaskComplete(taskId) {
+            try {
+                const response = await fetch(API_URL + 'tasks/' + taskId + '/toggle_complete/', {
+                    method: 'POST'
+                });
+                if (response.ok) {
+                    loadTasks();
+                }
+            } catch (error) {
+                console.error('Error toggling task completion:', error);
+            }
+        }
+
+        function renderTasks() {
+            const container = document.getElementById('taskList');
+            
+            if (tasks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📋</div>
+                        <p>No tasks yet. Add tasks to your projects.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const displayTasks = tasks.slice(0, ITEMS_PER_PAGE);
+            const hasMore = tasks.length > ITEMS_PER_PAGE;
+            
+            const tasksByProject = {};
+            displayTasks.forEach(t => {
+                if (!tasksByProject[t.project]) {
+                    tasksByProject[t.project] = { name: t.project_name, tasks: [] };
+                }
+                tasksByProject[t.project].tasks.push(t);
+            });
+
+            container.innerHTML = Object.entries(tasksByProject).map(([projId, data]) => `
+                <div style="margin-bottom: var(--space-4);">
+                    <h4 style="color: var(--color-primary); margin-bottom: var(--space-2); font-size: var(--text-sm); font-weight: 600;">${data.name}</h4>
+                    ${data.tasks.map(t => `
+                        <div class="list-item ${t.completed ? 'completed' : ''}">
+                            <label class="task-checkbox">
+                                <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTaskComplete(${t.id})">
+                                <div class="list-item-info">
+                                    <div class="list-item-name">${t.name} <span class="badge badge-${t.importance}">${t.importance}</span></div>
+                                    <div class="list-item-meta">Deadline: ${t.deadline} | ${t.work_hours}h</div>
+                                </div>
+                            </label>
+                            <div class="list-item-actions">
+                                <button class="btn-icon" onclick="openEditTaskModal(${t.id})" title="Edit">✏️</button>
+                                <button class="btn-icon danger" onclick="deleteTask(${t.id})" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('') + (hasMore ? `<div class="show-more" onclick="renderAllTasks()">Show all ${tasks.length} tasks →</div>` : '');
+        }
+
+        function renderAllTasks() {
+            const container = document.getElementById('taskList');
+            
+            const tasksByProject = {};
+            tasks.forEach(t => {
+                if (!tasksByProject[t.project]) {
+                    tasksByProject[t.project] = { name: t.project_name, tasks: [] };
+                }
+                tasksByProject[t.project].tasks.push(t);
+            });
+
+            container.innerHTML = Object.entries(tasksByProject).map(([projId, data]) => `
+                <div style="margin-bottom: var(--space-4);">
+                    <h4 style="color: var(--color-primary); margin-bottom: var(--space-2); font-size: var(--text-sm); font-weight: 600;">${data.name}</h4>
+                    ${data.tasks.map(t => `
+                        <div class="list-item ${t.completed ? 'completed' : ''}">
+                            <label class="task-checkbox">
+                                <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTaskComplete(${t.id})">
+                                <div class="list-item-info">
+                                    <div class="list-item-name">${t.name} <span class="badge badge-${t.importance}">${t.importance}</span></div>
+                                    <div class="list-item-meta">Deadline: ${t.deadline} | ${t.work_hours}h</div>
+                                </div>
+                            </label>
+                            <div class="list-item-actions">
+                                <button class="btn-icon" onclick="openEditTaskModal(${t.id})" title="Edit">✏️</button>
+                                <button class="btn-icon danger" onclick="deleteTask(${t.id})" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('') + `<div class="show-more" onclick="renderTasks()">Show less ↑</div>`;
+        }
+
+        function getSelectedDays() {
+            const days = [];
+            document.querySelectorAll('#workDays .checkbox-item input:checked').forEach(cb => {
+                days.push(cb.value);
+            });
+            return days;
+        }
+
+        function loadTodaySchedule() {
+            const container = document.getElementById('dashboard-calendar');
+            const saved = localStorage.getItem('plannerCalendar');
+            
+            if (!saved) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📅</div>
+                        <p>Generate a calendar to see today's schedule</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            try {
+                const data = JSON.parse(saved);
+                const today = new Date().toISOString().split('T')[0];
+                const todayTasks = data.calendar.find(day => day.date === today);
+                
+                if (!todayTasks || todayTasks.tasks.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">📅</div>
+                            <p>No tasks scheduled for today</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const now = new Date();
+                const currentMinutes = now.getHours() * 60 + now.getMinutes();
+                
+                const upcoming = [];
+                const completed = [];
+                
+                todayTasks.tasks.forEach(task => {
+                    if (!task.start_time || !task.end_time) return;
+                    const [endH, endM] = task.end_time.split(':').map(Number);
+                    const endMinutes = endH * 60 + endM;
+                    
+                    if (endMinutes < currentMinutes) {
+                        completed.push(task);
+                    } else {
+                        upcoming.push(task);
+                    }
+                });
+                
+                let html = '';
+                
+                if (upcoming.length > 0) {
+                    html += '<div class="upcoming-tasks">';
+                    upcoming.forEach(task => {
+                        html += `
+                            <div class="calendar-task priority-${task.task.importance}">
+                                <div class="task-info">
+                                    <div class="task-name">${task.task.name}</div>
+                                    <div class="task-project">${task.task.project_name}</div>
+                                </div>
+                                <div class="task-actions">
+                                    <div class="task-time">${task.start_time} - ${task.end_time}</div>
+                                    ${!task.task.completed ? `<button class="btn-complete" onclick="completeTaskFromCalendar(${task.task.id})">✓ Done</button>` : '<span style="color: var(--color-success); font-size: 10px;">✓</span>'}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                }
+                
+                if (completed.length > 0) {
+                    if (upcoming.length > 0) {
+                        html += '<div style="border-top: 1px solid var(--border-default); margin: var(--space-3) 0;"></div>';
+                        html += '<div style="font-size: var(--text-xs); color: var(--text-tertiary); margin-bottom: var(--space-2); text-transform: uppercase; letter-spacing: 0.05em;">Completed</div>';
+                    }
+                    completed.forEach(task => {
+                        html += `
+                            <div class="calendar-task priority-${task.task.importance} completed">
+                                <div class="task-info">
+                                    <div class="task-name">${task.task.name}</div>
+                                    <div class="task-project">${task.task.project_name}</div>
+                                </div>
+                                <div class="task-actions">
+                                    <div class="task-time" style="text-decoration: line-through;">${task.start_time} - ${task.end_time}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                container.innerHTML = html;
+                
+            } catch (e) {
+                console.error('Error loading today schedule:', e);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📅</div>
+                        <p>Generate a calendar to see today's schedule</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function saveSchedule() {
+            const scheduleData = {
+                work_days: getSelectedDays(),
+                work_start: document.getElementById('workStart').value,
+                work_end: document.getElementById('workEnd').value,
+                lunch_start: document.getElementById('lunchStart').value,
+                lunch_end: document.getElementById('lunchEnd').value,
+                overtime_enabled: document.getElementById('overtimeEnabled').checked
+            };
+
+            try {
+                if (workSchedule) {
+                    await fetch(API_URL + 'schedule/' + workSchedule.id + '/', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(scheduleData)
+                    });
+                } else {
+                    await fetch(API_URL + 'schedule/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(scheduleData)
+                    });
+                }
+                loadSchedule();
+            } catch (error) {
+                console.error('Error saving schedule:', error);
+            }
+        }
+
+        async function generateCalendar() {
+            await saveSchedule();
+            
+            const container = document.getElementById('calendarResult');
+            container.innerHTML = '<div class="loading">Generating calendar...</div>';
+
+            try {
+                const response = await fetch(API_URL + 'generate-calendar/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const data = await response.json();
+                
+                if (data.calendar.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">🗓️</div>
+                            <p>No tasks to schedule. Add some tasks first!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+
+                if (data.overtime_required) {
+                    html += `
+                        <div class="overtime-banner">
+                            <h3>⚠️ Overtime Required</h3>
+                            <p>You need <span class="hours">${data.overtime_hours} hours</span> of overtime to complete all tasks within deadlines.</p>
+                        </div>
+                    `;
+                }
+
+                html += '<div class="stats-row">';
+                html += `<div class="stat-card"><div class="stat-label">Scheduled</div><div class="stat-value">${data.total_hours_scheduled}h</div></div>`;
+                html += `<div class="stat-card"><div class="stat-label">Needed</div><div class="stat-value">${data.total_hours_needed}h</div></div>`;
+                if (data.overtime_hours > 0) {
+                    html += `<div class="stat-card"><div class="stat-label">Overtime</div><div class="stat-value" style="color: var(--color-warning);">${data.overtime_hours}h</div></div>`;
+                }
+                html += '</div>';
+
+                html += '<div class="calendar-grid">';
+                
+                data.calendar.forEach(day => {
+                    html += `
+                        <div class="calendar-day">
+                            <div class="calendar-day-header">
+                                <span class="date">${day.day_name}, ${day.date}</span>
+                                <span class="hours">${day.total_hours}h</span>
+                            </div>
+                            <div class="calendar-tasks">
+                                ${day.tasks.length === 0 ? '<p style="color: var(--text-secondary); font-size: 12px;">No tasks</p>' : ''}
+                                ${day.tasks.map(task => `
+                                    <div class="calendar-task priority-${task.task.importance} ${task.task.completed ? 'completed' : ''}">
+                                        <div class="task-info">
+                                            <div class="task-name">${task.task.name}</div>
+                                            <div class="task-project">${task.task.project_name}</div>
+                                        </div>
+                                        <div class="task-actions">
+                                            ${task.start_time ? `<div class="task-time">${task.start_time} - ${task.end_time}</div>` : ''}
+                                            ${!task.task.completed ? `<button class="btn-complete" onclick="completeTaskFromCalendar(${task.task.id})">✓ Done</button>` : '<span style="color: var(--color-success); font-size: 10px;">✓</span>'}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+
+                container.innerHTML = html;
+                
+                // Save to localStorage for Dashboard
+                localStorage.setItem('plannerCalendar', JSON.stringify(data));
+                
+                highlightCurrentTime();
+            } catch (error) {
+                console.error('Error generating calendar:', error);
+                container.innerHTML = '<div class="empty-state"><p>Error generating calendar. Please try again.</p></div>';
+            }
+        }
+
+        function highlightCurrentTime() {
+            const now = new Date();
+            const currentDay = now.toISOString().split('T')[0];
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentTimeMinutes = currentHour * 60 + currentMinute;
+            
+            const calendarDays = document.querySelectorAll('.calendar-day');
+            calendarDays.forEach(dayEl => {
+                const dateEl = dayEl.querySelector('.date');
+                if (dateEl && dateEl.textContent.includes(currentDay)) {
+                    dayEl.classList.add('current-day');
+                    
+                    const taskEls = dayEl.querySelectorAll('.calendar-task');
+                    taskEls.forEach(task => {
+                        const timeEl = task.querySelector('.task-time');
+                        if (timeEl) {
+                            const timeParts = timeEl.textContent.split(' - ');
+                            if (timeParts.length === 2) {
+                                const [startH, startM] = timeParts[0].split(':').map(Number);
+                                const [endH, endM] = timeParts[1].split(':').map(Number);
+                                const startMinutes = startH * 60 + startM;
+                                const endMinutes = endH * 60 + endM;
+                                
+                                if (currentTimeMinutes >= startMinutes && currentTimeMinutes < endMinutes) {
+                                    task.classList.add('current-time');
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        async function completeTaskFromCalendar(taskId) {
+            try {
+                const response = await fetch(API_URL + 'tasks/' + taskId + '/toggle_complete/', {
+                    method: 'POST'
+                });
+                if (response.ok) {
+                    loadTasks();
+                    generateCalendar();
+                }
+            } catch (error) {
+                console.error('Error completing task:', error);
+            }
+        }
+
+        function openEditTaskModal(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+            
+            document.getElementById('editTaskId').value = task.id;
+            document.getElementById('editTaskName').value = task.name;
+            document.getElementById('editTaskDeadline').value = task.deadline;
+            document.getElementById('editTaskImportance').value = task.importance;
+            document.getElementById('editTaskHours').value = task.work_hours;
+            
+            const projectSelect = document.getElementById('editTaskProject');
+            projectSelect.innerHTML = projects.map(p => 
+                `<option value="${p.id}" ${p.id === task.project ? 'selected' : ''}>${p.name}</option>`
+            ).join('');
+            
+            document.getElementById('editTaskModal').classList.add('active');
+        }
+
+        function closeEditTaskModal() {
+            document.getElementById('editTaskModal').classList.remove('active');
+        }
+
+        async function saveEditedTask() {
+            const taskId = document.getElementById('editTaskId').value;
+            const projectId = document.getElementById('editTaskProject').value;
+            const name = document.getElementById('editTaskName').value.trim();
+            const deadline = document.getElementById('editTaskDeadline').value;
+            const importance = document.getElementById('editTaskImportance').value;
+            const workHours = parseFloat(document.getElementById('editTaskHours').value);
+            
+            if (!projectId || !name || !deadline || !workHours) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            try {
+                const response = await fetch(API_URL + 'tasks/' + taskId + '/', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        project: parseInt(projectId),
+                        name,
+                        deadline,
+                        importance,
+                        work_hours: workHours
+                    })
+                });
+                
+                if (response.ok) {
+                    closeEditTaskModal();
+                    loadTasks();
+                }
+            } catch (error) {
+                console.error('Error updating task:', error);
+            }
+        }
+
+        // Close modal on outside click
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('editTaskModal');
+            if (e.target === modal) {
+                closeEditTaskModal();
+            }
+        });
+    </script>
+</body>
+</html>
