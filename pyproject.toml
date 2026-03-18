@@ -1,0 +1,18 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "VaxOnVaxOff"
+version = "0.1.0"
+description = "A Django-based planner application"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "django>=4.2",
+    "djangorestframework",
+    "django-cors-headers",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["planner", "plannerproject"]
