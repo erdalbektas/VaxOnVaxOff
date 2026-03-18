@@ -59,18 +59,25 @@ VaxOnVaxOff transforms chaotic task lists into structured training schedules. Mr
 
 ### Installation
 
+**Option 1: Direct Install via Pip**
+You can install VaxOnVaxOff directly from GitHub:
+```bash
+pip3 install git+https://github.com/erdalbektas/VaxOnVaxOff.git
+```
+
+**Option 2: Local Development Setup**
 ```bash
 # 1. Navigate to project directory
 cd planner
 
-# 2. Install dependencies
-pip install django djangorestframework django-cors-headers
+# 2. Install in editable mode
+pip3 install -e .
 
 # 3. Set up the database
-python manage.py migrate
+python3 manage.py migrate
 
 # 4. Start the training (run the server)
-python manage.py runserver 8000
+python3 manage.py runserver 8000
 ```
 
 ### Access the App
