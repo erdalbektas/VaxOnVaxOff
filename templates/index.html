@@ -1273,6 +1273,22 @@
                 </div>
             </div>
         </div>
+
+        <!-- Day Detail Modal -->
+        <div id="dayDetailModal" class="modal">
+            <div class="modal-content" style="max-width: 600px;">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="dayDetailTitle">📅 Day Details</h2>
+                    <button class="btn-icon" onclick="closeDayDetailModal()">✕</button>
+                </div>
+                <div class="modal-body" id="dayDetailBody">
+                    <!-- Content will be injected by JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeDayDetailModal()">Close</button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script>
@@ -1810,14 +1826,14 @@
                 
                 data.calendar.forEach(day => {
                     html += `
-                        <div class="calendar-day">
+                        <div class="calendar-day" onclick="openDayDetail('${day.date}')">
                             <div class="calendar-day-header">
                                 <span class="date">${day.day_name}, ${day.date}</span>
                                 <span class="hours">${day.total_hours}h</span>
                             </div>
                             <div class="calendar-tasks">
                                 ${day.tasks.length === 0 ? '<p style="color: var(--text-secondary); font-size: 12px;">No tasks</p>' : ''}
-                                ${day.tasks.map(task => `
+                                ${day.tasks.slice(0, 3).map(task => `
                                     <div class="calendar-task priority-${task.task.importance} ${task.task.completed ? 'completed' : ''}">
                                         <div class="task-info">
                                             <div class="task-name">${task.task.name}</div>
@@ -1825,16 +1841,19 @@
                                         </div>
                                         <div class="task-actions">
                                             ${task.start_time ? `<div class="task-time">${task.start_time} - ${task.end_time}</div>` : ''}
-                                            ${!task.task.completed ? `<button class="btn-complete" onclick="completeTaskFromCalendar(${task.task.id})">✓ Done</button>` : '<span style="color: var(--color-success); font-size: 10px;">✓</span>'}
                                         </div>
                                     </div>
                                 `).join('')}
+                                ${day.tasks.length > 3 ? `<p style="color: var(--color-primary); font-size: 11px; text-align: center; margin-top: 8px;">+ ${day.tasks.length - 3} more →</p>` : ''}
                             </div>
                         </div>
                     `;
                 });
                 
                 html += '</div>';
+                
+                // Store full calendar data for day detail view
+                window.fullCalendarData = data;
 
                 container.innerHTML = html;
                 
@@ -1953,11 +1972,137 @@
             }
         }
 
+        function openDayDetail(dateStr) {
+            const data = window.fullCalendarData;
+            if (!data) return;
+            
+            const dayData = data.calendar.find(d => d.date === dateStr);
+            if (!dayData) return;
+            
+            document.getElementById('dayDetailTitle').innerHTML = `📅 ${dayData.day_name}, ${dayData.date} <span style="font-size: 14px; color: var(--color-primary);">(${dayData.total_hours}h total)</span>`;
+            
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            const today = now.toISOString().split('T')[0];
+            const isToday = dateStr === today;
+            
+            let html = '';
+            
+            if (dayData.tasks.length === 0) {
+                html = `
+                    <div class="empty-state">
+                        <div class="icon">📭</div>
+                        <p>No training scheduled for this day.</p>
+                    </div>
+                `;
+            } else {
+                // Group tasks by time period
+                const morning = dayData.tasks.filter(t => t.start_time && parseInt(t.start_time.split(':')[0]) < 12);
+                const afternoon = dayData.tasks.filter(t => t.start_time && parseInt(t.start_time.split(':')[0]) >= 12);
+                
+                if (morning.length > 0) {
+                    html += `
+                        <div style="margin-bottom: var(--space-4);">
+                            <h4 style="color: var(--color-warning); font-size: 14px; margin-bottom: var(--space-2);">🌅 Morning</h4>
+                            ${morning.map(task => renderDayTaskCard(task, isToday, currentMinutes)).join('')}
+                        </div>
+                    `;
+                }
+                
+                if (afternoon.length > 0) {
+                    html += `
+                        <div style="margin-bottom: var(--space-4);">
+                            <h4 style="color: var(--color-primary); font-size: 14px; margin-bottom: var(--space-2);">🌇 Afternoon</h4>
+                            ${afternoon.map(task => renderDayTaskCard(task, isToday, currentMinutes)).join('')}
+                        </div>
+                    `;
+                }
+                
+                // Show overdue/unscheduled tasks
+                const unscheduled = dayData.tasks.filter(t => !t.start_time);
+                if (unscheduled.length > 0) {
+                    html += `
+                        <div style="margin-bottom: var(--space-4);">
+                            <h4 style="color: var(--color-danger); font-size: 14px; margin-bottom: var(--space-2);">⚠️ Overdue</h4>
+                            ${unscheduled.map(task => renderDayTaskCard(task, isToday, currentMinutes)).join('')}
+                        </div>
+                    `;
+                }
+                
+                // Stats for the day
+                html += `
+                    <div style="border-top: 1px solid var(--border-default); padding-top: var(--space-4); margin-top: var(--space-4);">
+                        <div style="display: flex; gap: var(--space-4);">
+                            <div style="flex: 1; text-align: center; padding: var(--space-3); background: var(--bg-primary); border-radius: var(--radius-lg);">
+                                <div style="font-size: var(--text-xs); color: var(--text-secondary);">Tasks</div>
+                                <div style="font-size: var(--text-xl); font-weight: 700; font-family: var(--font-mono);">${dayData.tasks.length}</div>
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: var(--space-3); background: var(--bg-primary); border-radius: var(--radius-lg);">
+                                <div style="font-size: var(--text-xs); color: var(--text-secondary);">Total Hours</div>
+                                <div style="font-size: var(--text-xl); font-weight: 700; font-family: var(--font-mono);">${dayData.total_hours}h</div>
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: var(--space-3); background: var(--bg-primary); border-radius: var(--radius-lg);">
+                                <div style="font-size: var(--text-xs); color: var(--text-secondary);">Completed</div>
+                                <div style="font-size: var(--text-xl); font-weight: 700; font-family: var(--font-mono); color: var(--color-success);">${dayData.tasks.filter(t => t.task.completed).length}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('dayDetailBody').innerHTML = html;
+            document.getElementById('dayDetailModal').classList.add('active');
+        }
+
+        function renderDayTaskCard(task, isToday, currentMinutes) {
+            const [endH, endM] = task.end_time ? task.end_time.split(':').map(Number) : [0, 0];
+            const endMinutes = endH * 60 + endM;
+            const isCurrent = isToday && task.start_time && currentMinutes >= (parseInt(task.start_time.split(':')[0]) * 60 + parseInt(task.start_time.split(':')[1])) && currentMinutes < endMinutes;
+            
+            let timeRange = '';
+            if (task.start_time && task.end_time) {
+                timeRange = `${task.start_time} - ${task.end_time}`;
+            } else if (task.start_time) {
+                timeRange = `${task.start_time} - ?`;
+            } else {
+                timeRange = 'Not scheduled';
+            }
+            
+            const duration = task.start_time && task.end_time ? 
+                ((endH * 60 + endM) - (parseInt(task.start_time.split(':')[0]) * 60 + parseInt(task.start_time.split(':')[1]))) / 60 : 0;
+            
+            return `
+                <div class="calendar-task priority-${task.task.importance} ${task.task.completed ? 'completed' : ''} ${isCurrent ? 'current-time' : ''}" style="margin-bottom: var(--space-2);">
+                    <div class="task-info">
+                        <div class="task-name">${task.task.name}</div>
+                        <div class="task-project">🏯 ${task.task.project_name}</div>
+                        ${task.message && task.message !== 'Successfully scheduled' && task.message !== 'Scheduled with overtime' ? `<div style="font-size: 11px; color: var(--color-warning); margin-top: 4px;">${task.message}</div>` : ''}
+                    </div>
+                    <div class="task-actions" style="flex-direction: column; align-items: flex-end; gap: 4px;">
+                        <div class="task-time" style="font-size: 12px;">${timeRange}</div>
+                        <div style="font-size: 11px; color: var(--text-secondary);">${duration.toFixed(1)}h</div>
+                        ${task.task.completed ? 
+                            '<span style="color: var(--color-success); font-size: 11px;">✓ Complete</span>' : 
+                            `<button class="btn-complete" onclick="completeTaskFromCalendar(${task.task.id}); closeDayDetailModal();">✓ Done</button>`
+                        }
+                    </div>
+                </div>
+            `;
+        }
+
+        function closeDayDetailModal() {
+            document.getElementById('dayDetailModal').classList.remove('active');
+        }
+
         // Close modal on outside click
         document.addEventListener('click', (e) => {
-            const modal = document.getElementById('editTaskModal');
-            if (e.target === modal) {
+            const editModal = document.getElementById('editTaskModal');
+            if (e.target === editModal) {
                 closeEditTaskModal();
+            }
+            const dayModal = document.getElementById('dayDetailModal');
+            if (e.target === dayModal) {
+                closeDayDetailModal();
             }
         });
     </script>
