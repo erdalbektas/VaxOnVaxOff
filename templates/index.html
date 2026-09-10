@@ -962,9 +962,368 @@
             font-size: 20px;
         }
 
+        /* Focus Mode — lean, distraction-free */
+        body.focus-mode .sidebar,
+        body.focus-mode .mobile-menu-btn {
+            display: none;
+        }
+
+        body.focus-mode .main-content {
+            margin-left: 0;
+        }
+
+        #page-focus {
+            min-height: 100vh;
+        }
+
+        #page-focus.active {
+            display: flex;
+        }
+
+        .focus-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-8) var(--space-6);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .focus-exit {
+            position: absolute;
+            top: var(--space-5);
+            right: var(--space-5);
+            background: transparent;
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: var(--font-sans);
+        }
+
+        .focus-exit:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+
+        .focus-content {
+            width: 100%;
+            max-width: 520px;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+
+        .focus-label {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: var(--space-6);
+        }
+
+        .focus-task-name {
+            font-family: var(--font-mono);
+            font-size: clamp(1.75rem, 5vw, 2.5rem);
+            font-weight: 700;
+            line-height: 1.25;
+            margin-bottom: var(--space-3);
+            color: var(--text-primary);
+        }
+
+        .focus-project {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-8);
+        }
+
+        .focus-time-block {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-5) var(--space-8);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            margin-bottom: var(--space-8);
+            background: var(--bg-secondary);
+        }
+
+        .focus-time-range {
+            font-family: var(--font-mono);
+            font-size: var(--text-lg);
+            color: var(--color-primary);
+        }
+
+        .focus-countdown {
+            font-size: var(--text-sm);
+            color: var(--text-tertiary);
+        }
+
+        .focus-countdown strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .focus-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .focus-done-btn {
+            background: var(--color-success);
+            color: white;
+            border: none;
+            padding: var(--space-4) var(--space-8);
+            font-size: var(--text-base);
+            font-weight: 600;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: var(--font-sans);
+            min-width: 180px;
+        }
+
+        .focus-done-btn:hover {
+            background: #2ea043;
+            transform: translateY(-1px);
+        }
+
+        .focus-done-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .focus-empty-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-4);
+            opacity: 0.6;
+        }
+
+        .focus-empty-title {
+            font-family: var(--font-mono);
+            font-size: var(--text-xl);
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+
+        .focus-empty-text {
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+            line-height: 1.6;
+            margin-bottom: var(--space-6);
+        }
+
+        .focus-next {
+            padding: var(--space-4) var(--space-5);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            text-align: left;
+            width: 100%;
+        }
+
+        .focus-next-label {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-2);
+        }
+
+        .focus-next-name {
+            font-weight: 600;
+            font-size: var(--text-base);
+            margin-bottom: var(--space-1);
+        }
+
+        .focus-next-meta {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+        }
+
+        .focus-pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: var(--space-2);
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: var(--shadow-glow-primary);
+        }
+
+        .nav-item.focus-nav {
+            background: var(--color-primary-muted);
+            border: 1px solid rgba(88, 166, 255, 0.25);
+        }
+
+        .nav-item.focus-nav:hover {
+            background: rgba(88, 166, 255, 0.22);
+        }
+
+        .btn-focus {
+            background: transparent;
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .btn-focus:hover {
+            background: var(--color-primary-muted);
+        }
+
+        @keyframes skeleton-shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+
+        .focus-skeleton {
+            background: linear-gradient(90deg, var(--bg-secondary) 0%, var(--bg-elevated) 50%, var(--bg-secondary) 100%);
+            background-size: 200px 100%;
+            animation: skeleton-shimmer 1.2s ease-in-out infinite;
+            border-radius: var(--radius-md);
+        }
+
+        .focus-skeleton-title {
+            height: 2.5rem;
+            width: 80%;
+            margin: 0 auto var(--space-3);
+        }
+
+        .focus-skeleton-sub {
+            height: 1rem;
+            width: 40%;
+            margin: 0 auto var(--space-8);
+        }
+
+        .focus-skeleton-block {
+            height: 5rem;
+            width: 60%;
+            margin: 0 auto var(--space-8);
+        }
+
+        .focus-pomodoro-toggle {
+            position: absolute;
+            top: var(--space-5);
+            left: var(--space-5);
+            background: transparent;
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: var(--font-sans);
+        }
+
+        .focus-pomodoro-toggle:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+
+        .focus-pomodoro-toggle.active {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            background: var(--color-primary-muted);
+        }
+
+        .pomodoro-ring-wrap {
+            position: relative;
+            width: 168px;
+            height: 168px;
+            margin: 0 auto var(--space-6);
+        }
+
+        .pomodoro-ring {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .pomodoro-ring-bg {
+            fill: none;
+            stroke: var(--bg-elevated);
+            stroke-width: 6;
+        }
+
+        .pomodoro-ring-fill {
+            fill: none;
+            stroke: var(--color-primary);
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 339.292;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+        }
+
+        body.focus-break .pomodoro-ring-fill {
+            stroke: var(--color-success);
+        }
+
+        .pomodoro-time {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .pomodoro-meta {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            margin-top: calc(-1 * var(--space-4));
+            margin-bottom: var(--space-6);
+        }
+
+        .focus-label.focus-break-label {
+            color: var(--color-success);
+        }
+
+        body.focus-break .focus-task-name {
+            opacity: 0.5;
+        }
+
+        .pomodoro-skip {
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            font-size: var(--text-sm);
+            cursor: pointer;
+            margin-top: var(--space-2);
+            font-family: var(--font-sans);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .pomodoro-skip:hover {
+            color: var(--text-secondary);
+        }
+
         @media (max-width: 768px) {
             .mobile-menu-btn {
                 display: flex;
+            }
+
+            .focus-exit {
+                top: var(--space-4);
+                right: var(--space-4);
+            }
+
+            .focus-pomodoro-toggle {
+                top: var(--space-4);
+                left: var(--space-4);
             }
         }
     </style>
@@ -994,6 +1353,10 @@
                     <span class="nav-icon">📅</span>
                     <span class="nav-label">Calendar</span>
                     <span class="nav-badge" id="calendar-badge">→</span>
+                </div>
+                <div class="nav-item focus-nav" data-page="focus" onclick="enterFocusMode()">
+                    <span class="nav-icon">◎</span>
+                    <span class="nav-label">Focus</span>
                 </div>
             </div>
             
@@ -1056,6 +1419,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title"><span>📅</span> Today's Schedule</h2>
+                        <button class="btn btn-focus" onclick="enterFocusMode()">◎ Focus</button>
                     </div>
                     <div id="dashboard-calendar">
                         <div class="empty-state">
@@ -1215,10 +1579,21 @@
             </div>
         </section>
 
+        <section class="page-section" id="page-focus">
+            <div class="focus-container">
+                <button class="focus-pomodoro-toggle" id="focus-pomodoro-toggle" onclick="togglePomodoro()" title="25 min work, 5 min rest">Pomodoro</button>
+                <button class="focus-exit" onclick="exitFocusMode()" title="Exit focus (Esc)">Exit</button>
+                <div class="focus-content" id="focus-content"></div>
+            </div>
+        </section>
+
         <section class="page-section" id="page-calendar">
             <header class="content-header">
                 <h1 class="content-title">📅 Training Schedule</h1>
-                <button class="btn btn-primary" onclick="generateCalendar()">🔄 Refresh</button>
+                <div style="display: flex; gap: var(--space-3);">
+                    <button class="btn btn-focus" onclick="enterFocusMode()">◎ Focus</button>
+                    <button class="btn btn-primary" onclick="generateCalendar()">🔄 Refresh</button>
+                </div>
             </header>
             <div class="content-body">
                 <div id="calendarResult">
@@ -1296,6 +1671,12 @@
         let projects = [];
         let tasks = [];
         let workSchedule = null;
+        let focusTimer = null;
+        let pomodoroTickTimer = null;
+
+        const POMODORO_WORK_SEC = 25 * 60;
+        const POMODORO_BREAK_SEC = 5 * 60;
+        const POMODORO_RING_CIRC = 339.292;
         
         const ITEMS_PER_PAGE = 5;
 
@@ -1333,11 +1714,18 @@
         }
 
         function showPage(pageId) {
+            if (pageId !== 'focus') {
+                stopFocusTimer();
+                document.body.classList.remove('focus-mode');
+                document.body.classList.remove('focus-break');
+            }
+
             document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             
             document.getElementById('page-' + pageId).classList.add('active');
-            document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+            const navItem = document.querySelector(`[data-page="${pageId}"]`);
+            if (navItem) navItem.classList.add('active');
             
             if (window.innerWidth <= 768) {
                 document.getElementById('sidebar').classList.remove('open');
@@ -1349,6 +1737,414 @@
             
             if (pageId === 'calendar' && tasks.length > 0) {
                 generateCalendar();
+            }
+        }
+
+        function getCalendarData() {
+            const saved = localStorage.getItem('plannerCalendar');
+            if (!saved) return null;
+            try {
+                return JSON.parse(saved);
+            } catch {
+                return null;
+            }
+        }
+
+        function getCurrentMinutes() {
+            const now = new Date();
+            return now.getHours() * 60 + now.getMinutes();
+        }
+
+        function getTodayDateStr() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        function parseTimeToMinutes(timeStr) {
+            const [h, m] = timeStr.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        function getActiveTask(calendarData) {
+            if (!calendarData?.calendar) return null;
+            const day = calendarData.calendar.find(d => d.date === getTodayDateStr());
+            if (!day) return null;
+            const currentMinutes = getCurrentMinutes();
+            return day.tasks.find(task => {
+                if (!task.start_time || !task.end_time) return false;
+                const start = parseTimeToMinutes(task.start_time);
+                const end = parseTimeToMinutes(task.end_time);
+                return currentMinutes >= start && currentMinutes < end;
+            }) || null;
+        }
+
+        function getNextUpcomingTask(calendarData) {
+            if (!calendarData?.calendar) return null;
+            const day = calendarData.calendar.find(d => d.date === getTodayDateStr());
+            if (!day) return null;
+            const currentMinutes = getCurrentMinutes();
+            let next = null;
+            let nextStart = Infinity;
+            day.tasks.forEach(task => {
+                if (!task.start_time || !task.end_time) return;
+                const start = parseTimeToMinutes(task.start_time);
+                if (start > currentMinutes && start < nextStart) {
+                    next = task;
+                    nextStart = start;
+                }
+            });
+            return next;
+        }
+
+        function formatDuration(minutes) {
+            if (minutes <= 0) return '0m';
+            const h = Math.floor(minutes / 60);
+            const m = minutes % 60;
+            if (h === 0) return `${m}m`;
+            if (m === 0) return `${h}h`;
+            return `${h}h ${m}m`;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function isPomodoroEnabled() {
+            return localStorage.getItem('focusPomodoroEnabled') === 'true';
+        }
+
+        function loadPomodoroState() {
+            try {
+                return JSON.parse(localStorage.getItem('focusPomodoroState') || 'null');
+            } catch {
+                return null;
+            }
+        }
+
+        function savePomodoroState(state) {
+            localStorage.setItem('focusPomodoroState', JSON.stringify(state));
+        }
+
+        function formatSeconds(totalSec) {
+            const m = Math.floor(totalSec / 60);
+            const s = totalSec % 60;
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function getPomodoroRemainingSec() {
+            const state = loadPomodoroState();
+            if (!state?.endsAt) return 0;
+            return Math.max(0, Math.ceil((state.endsAt - Date.now()) / 1000));
+        }
+
+        function startPomodoroPhase(phase) {
+            const prev = loadPomodoroState();
+            const duration = phase === 'work' ? POMODORO_WORK_SEC : POMODORO_BREAK_SEC;
+            savePomodoroState({
+                phase,
+                endsAt: Date.now() + duration * 1000,
+                rounds: prev?.rounds || 0
+            });
+            document.body.classList.toggle('focus-break', phase === 'break');
+        }
+
+        function advancePomodoroPhase() {
+            const state = loadPomodoroState();
+            if (!state) return;
+            if (state.phase === 'work') {
+                savePomodoroState({
+                    phase: 'break',
+                    endsAt: Date.now() + POMODORO_BREAK_SEC * 1000,
+                    rounds: (state.rounds || 0) + 1
+                });
+                document.body.classList.add('focus-break');
+            } else {
+                startPomodoroPhase('work');
+            }
+            renderFocusMode();
+            startFocusTimer();
+        }
+
+        function ensurePomodoroState() {
+            if (!isPomodoroEnabled()) return;
+            let state = loadPomodoroState();
+            if (!state) {
+                startPomodoroPhase('work');
+                return;
+            }
+            while (state && Date.now() >= state.endsAt) {
+                if (state.phase === 'work') {
+                    state = {
+                        phase: 'break',
+                        endsAt: Date.now() + POMODORO_BREAK_SEC * 1000,
+                        rounds: (state.rounds || 0) + 1
+                    };
+                } else {
+                    state = {
+                        phase: 'work',
+                        endsAt: Date.now() + POMODORO_WORK_SEC * 1000,
+                        rounds: state.rounds || 0
+                    };
+                }
+                savePomodoroState(state);
+            }
+            document.body.classList.toggle('focus-break', state?.phase === 'break');
+        }
+
+        function renderPomodoroRing(remainingSec) {
+            const state = loadPomodoroState();
+            const total = state?.phase === 'break' ? POMODORO_BREAK_SEC : POMODORO_WORK_SEC;
+            const progress = total > 0 ? remainingSec / total : 0;
+            const offset = POMODORO_RING_CIRC * (1 - progress);
+            const isBreak = state?.phase === 'break';
+            const rounds = state?.rounds || 0;
+
+            return `
+                <div class="pomodoro-ring-wrap">
+                    <svg class="pomodoro-ring" viewBox="0 0 120 120">
+                        <circle class="pomodoro-ring-bg" cx="60" cy="60" r="54"></circle>
+                        <circle class="pomodoro-ring-fill" id="pomodoro-ring-fill" cx="60" cy="60" r="54"
+                            style="stroke-dashoffset: ${offset}"></circle>
+                    </svg>
+                    <div class="pomodoro-time" id="pomodoro-time">${formatSeconds(remainingSec)}</div>
+                </div>
+                <div class="focus-label ${isBreak ? 'focus-break-label' : ''}">
+                    ${isBreak ? 'Rest · 5 min' : '<span class="focus-pulse"></span>Work · 25 min'}
+                </div>
+                ${rounds > 0 ? `<div class="pomodoro-meta">${rounds} pomodoro${rounds === 1 ? '' : 's'} completed</div>` : '<div class="pomodoro-meta">&nbsp;</div>'}
+            `;
+        }
+
+        function updatePomodoroUI() {
+            const remaining = getPomodoroRemainingSec();
+            if (remaining <= 0) {
+                advancePomodoroPhase();
+                return;
+            }
+            const timeEl = document.getElementById('pomodoro-time');
+            const ringEl = document.getElementById('pomodoro-ring-fill');
+            if (timeEl) timeEl.textContent = formatSeconds(remaining);
+            if (ringEl) {
+                const state = loadPomodoroState();
+                const total = state?.phase === 'break' ? POMODORO_BREAK_SEC : POMODORO_WORK_SEC;
+                ringEl.style.strokeDashoffset = POMODORO_RING_CIRC * (1 - remaining / total);
+            }
+        }
+
+        function tickPomodoro() {
+            updatePomodoroUI();
+        }
+
+        function updatePomodoroToggle() {
+            const btn = document.getElementById('focus-pomodoro-toggle');
+            if (!btn) return;
+            const enabled = isPomodoroEnabled();
+            btn.classList.toggle('active', enabled);
+            btn.style.display = document.getElementById('page-focus').classList.contains('active') ? '' : 'none';
+        }
+
+        function togglePomodoro() {
+            const enabled = !isPomodoroEnabled();
+            localStorage.setItem('focusPomodoroEnabled', enabled ? 'true' : 'false');
+            if (enabled) {
+                startPomodoroPhase('work');
+            } else {
+                localStorage.removeItem('focusPomodoroState');
+                document.body.classList.remove('focus-break');
+            }
+            updatePomodoroToggle();
+            renderFocusMode();
+            startFocusTimer();
+        }
+
+        function skipPomodoroBreak() {
+            const state = loadPomodoroState();
+            if (!state || state.phase !== 'break') return;
+            startPomodoroPhase('work');
+            renderFocusMode();
+            startFocusTimer();
+        }
+
+        function getFocusContext(data) {
+            const active = getActiveTask(data);
+            if (active) {
+                return {
+                    type: 'active',
+                    name: active.task.name,
+                    project: active.task.project_name,
+                    taskId: active.task.id,
+                    completed: active.task.completed,
+                    slotLabel: `${active.start_time} – ${active.end_time}`,
+                    slotRemaining: parseTimeToMinutes(active.end_time) - getCurrentMinutes()
+                };
+            }
+            const next = getNextUpcomingTask(data);
+            if (next) {
+                return {
+                    type: 'upcoming',
+                    name: next.task.name,
+                    project: next.task.project_name,
+                    taskId: next.task.id,
+                    completed: false,
+                    slotLabel: `${next.start_time} – ${next.end_time}`,
+                    slotRemaining: parseTimeToMinutes(next.start_time) - getCurrentMinutes()
+                };
+            }
+            return { type: 'idle', name: 'Focus session', project: '', taskId: null, completed: false };
+        }
+
+        function renderFocusMode() {
+            const container = document.getElementById('focus-content');
+            const data = getCalendarData();
+            const pomodoroOn = isPomodoroEnabled();
+
+            updatePomodoroToggle();
+
+            if (!data) {
+                document.getElementById('focus-pomodoro-toggle').style.display = 'none';
+                container.innerHTML = `
+                    <div class="focus-empty-icon">📅</div>
+                    <div class="focus-empty-title">No schedule yet</div>
+                    <p class="focus-empty-text">Generate your training schedule first, then return here to focus on one task at a time.</p>
+                    <button class="btn btn-primary" onclick="exitFocusMode(); showPage('calendar'); generateCalendar();">Get Schedule</button>
+                `;
+                return;
+            }
+
+            document.getElementById('focus-pomodoro-toggle').style.display = '';
+            const ctx = getFocusContext(data);
+            const pomodoroState = loadPomodoroState();
+            const isBreak = pomodoroOn && pomodoroState?.phase === 'break';
+
+            if (pomodoroOn) {
+                ensurePomodoroState();
+            }
+
+            if (ctx.type === 'idle' && !pomodoroOn) {
+                container.innerHTML = `
+                    <div class="focus-empty-icon">☕</div>
+                    <div class="focus-empty-title">Nothing scheduled now</div>
+                    <p class="focus-empty-text">No more tasks on today's schedule. Well done — or switch on Pomodoro for a timed focus session.</p>
+                `;
+                return;
+            }
+
+            const remainingSec = pomodoroOn ? getPomodoroRemainingSec() : 0;
+            const showActions = ctx.type === 'active' && !ctx.completed && !isBreak;
+
+            let timerBlock;
+            if (pomodoroOn) {
+                timerBlock = renderPomodoroRing(remainingSec);
+            } else if (ctx.type === 'active') {
+                timerBlock = `
+                    <div class="focus-time-block">
+                        <div class="focus-time-range">${ctx.slotLabel}</div>
+                        <div class="focus-countdown"><strong>${formatDuration(ctx.slotRemaining)}</strong> remaining</div>
+                    </div>
+                `;
+            } else {
+                timerBlock = `
+                    <div class="focus-time-block">
+                        <div class="focus-time-range">${ctx.slotLabel}</div>
+                        <div class="focus-countdown">starts in <strong>${formatDuration(ctx.slotRemaining)}</strong></div>
+                    </div>
+                `;
+            }
+
+            const label = isBreak
+                ? 'Rest'
+                : (ctx.type === 'active' ? 'Now' : (ctx.type === 'upcoming' ? 'Up next' : 'Focus'));
+
+            container.innerHTML = `
+                ${!pomodoroOn ? `<div class="focus-label">${ctx.type === 'active' ? '<span class="focus-pulse"></span>' : ''}${label}</div>` : ''}
+                <h1 class="focus-task-name">${escapeHtml(ctx.name)}</h1>
+                ${ctx.project ? `<div class="focus-project">${escapeHtml(ctx.project)}</div>` : ''}
+                ${timerBlock}
+                <div class="focus-actions">
+                    ${showActions
+                        ? `<button class="focus-done-btn" onclick="completeTaskFromFocus(${ctx.taskId})">Mark Done</button>`
+                        : (ctx.completed
+                            ? '<span style="color: var(--color-success); font-size: var(--text-sm);">✓ Completed</span>'
+                            : (isBreak
+                                ? '<p class="focus-empty-text" style="margin-bottom: 0;">Step away. Breathe.</p><button class="pomodoro-skip" onclick="skipPomodoroBreak()">Skip rest</button>'
+                                : ''))
+                    }
+                </div>
+            `;
+        }
+
+        function startFocusTimer() {
+            stopFocusTimer();
+            if (isPomodoroEnabled()) {
+                ensurePomodoroState();
+                pomodoroTickTimer = setInterval(tickPomodoro, 1000);
+                tickPomodoro();
+            } else {
+                focusTimer = setInterval(renderFocusMode, 60000);
+            }
+        }
+
+        function stopFocusTimer() {
+            if (focusTimer) {
+                clearInterval(focusTimer);
+                focusTimer = null;
+            }
+            if (pomodoroTickTimer) {
+                clearInterval(pomodoroTickTimer);
+                pomodoroTickTimer = null;
+            }
+        }
+
+        function enterFocusMode() {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+            document.getElementById('page-focus').classList.add('active');
+            const focusNav = document.querySelector('[data-page="focus"]');
+            if (focusNav) focusNav.classList.add('active');
+
+            document.body.classList.add('focus-mode');
+            if (isPomodoroEnabled()) {
+                document.body.classList.toggle('focus-break', loadPomodoroState()?.phase === 'break');
+            }
+
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+
+            renderFocusMode();
+            startFocusTimer();
+        }
+
+        function exitFocusMode() {
+            stopFocusTimer();
+            document.body.classList.remove('focus-mode');
+            document.body.classList.remove('focus-break');
+            showPage('dashboard');
+        }
+
+        async function completeTaskFromFocus(taskId) {
+            const btn = document.querySelector('.focus-done-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Saving…';
+            }
+            try {
+                const response = await fetch(API_URL + 'tasks/' + taskId + '/toggle_complete/', {
+                    method: 'POST'
+                });
+                if (response.ok) {
+                    await loadTasks();
+                    await generateCalendar();
+                    renderFocusMode();
+                }
+            } catch (error) {
+                console.error('Error completing task:', error);
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = 'Mark Done';
+                }
             }
         }
 
@@ -1861,6 +2657,10 @@
                 localStorage.setItem('plannerCalendar', JSON.stringify(data));
                 
                 highlightCurrentTime();
+
+                if (document.getElementById('page-focus').classList.contains('active')) {
+                    renderFocusMode();
+                }
             } catch (error) {
                 console.error('Error generating calendar:', error);
                 container.innerHTML = '<div class="empty-state"><p>Error generating calendar. Please try again.</p></div>';
@@ -1909,6 +2709,9 @@
                 if (response.ok) {
                     loadTasks();
                     generateCalendar();
+                    if (document.getElementById('page-focus').classList.contains('active')) {
+                        renderFocusMode();
+                    }
                 }
             } catch (error) {
                 console.error('Error completing task:', error);
@@ -2093,6 +2896,12 @@
         function closeDayDetailModal() {
             document.getElementById('dayDetailModal').classList.remove('active');
         }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('page-focus').classList.contains('active')) {
+                exitFocusMode();
+            }
+        });
 
         // Close modal on outside click
         document.addEventListener('click', (e) => {
