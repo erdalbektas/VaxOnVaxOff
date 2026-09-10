@@ -962,9 +962,261 @@
             font-size: 20px;
         }
 
+        /* Focus Mode — lean, distraction-free */
+        body.focus-mode .sidebar,
+        body.focus-mode .mobile-menu-btn {
+            display: none;
+        }
+
+        body.focus-mode .main-content {
+            margin-left: 0;
+        }
+
+        #page-focus {
+            min-height: 100vh;
+        }
+
+        #page-focus.active {
+            display: flex;
+        }
+
+        .focus-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-8) var(--space-6);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .focus-exit {
+            position: absolute;
+            top: var(--space-5);
+            right: var(--space-5);
+            background: transparent;
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: var(--font-sans);
+        }
+
+        .focus-exit:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+
+        .focus-content {
+            width: 100%;
+            max-width: 520px;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+
+        .focus-label {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: var(--space-6);
+        }
+
+        .focus-task-name {
+            font-family: var(--font-mono);
+            font-size: clamp(1.75rem, 5vw, 2.5rem);
+            font-weight: 700;
+            line-height: 1.25;
+            margin-bottom: var(--space-3);
+            color: var(--text-primary);
+        }
+
+        .focus-project {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-8);
+        }
+
+        .focus-time-block {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-5) var(--space-8);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            margin-bottom: var(--space-8);
+            background: var(--bg-secondary);
+        }
+
+        .focus-time-range {
+            font-family: var(--font-mono);
+            font-size: var(--text-lg);
+            color: var(--color-primary);
+        }
+
+        .focus-countdown {
+            font-size: var(--text-sm);
+            color: var(--text-tertiary);
+        }
+
+        .focus-countdown strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .focus-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .focus-done-btn {
+            background: var(--color-success);
+            color: white;
+            border: none;
+            padding: var(--space-4) var(--space-8);
+            font-size: var(--text-base);
+            font-weight: 600;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: var(--font-sans);
+            min-width: 180px;
+        }
+
+        .focus-done-btn:hover {
+            background: #2ea043;
+            transform: translateY(-1px);
+        }
+
+        .focus-done-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .focus-empty-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-4);
+            opacity: 0.6;
+        }
+
+        .focus-empty-title {
+            font-family: var(--font-mono);
+            font-size: var(--text-xl);
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+
+        .focus-empty-text {
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
+            line-height: 1.6;
+            margin-bottom: var(--space-6);
+        }
+
+        .focus-next {
+            padding: var(--space-4) var(--space-5);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            text-align: left;
+            width: 100%;
+        }
+
+        .focus-next-label {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-2);
+        }
+
+        .focus-next-name {
+            font-weight: 600;
+            font-size: var(--text-base);
+            margin-bottom: var(--space-1);
+        }
+
+        .focus-next-meta {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+        }
+
+        .focus-pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: var(--space-2);
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: var(--shadow-glow-primary);
+        }
+
+        .nav-item.focus-nav {
+            background: var(--color-primary-muted);
+            border: 1px solid rgba(88, 166, 255, 0.25);
+        }
+
+        .nav-item.focus-nav:hover {
+            background: rgba(88, 166, 255, 0.22);
+        }
+
+        .btn-focus {
+            background: transparent;
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .btn-focus:hover {
+            background: var(--color-primary-muted);
+        }
+
+        @keyframes skeleton-shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+
+        .focus-skeleton {
+            background: linear-gradient(90deg, var(--bg-secondary) 0%, var(--bg-elevated) 50%, var(--bg-secondary) 100%);
+            background-size: 200px 100%;
+            animation: skeleton-shimmer 1.2s ease-in-out infinite;
+            border-radius: var(--radius-md);
+        }
+
+        .focus-skeleton-title {
+            height: 2.5rem;
+            width: 80%;
+            margin: 0 auto var(--space-3);
+        }
+
+        .focus-skeleton-sub {
+            height: 1rem;
+            width: 40%;
+            margin: 0 auto var(--space-8);
+        }
+
+        .focus-skeleton-block {
+            height: 5rem;
+            width: 60%;
+            margin: 0 auto var(--space-8);
+        }
+
         @media (max-width: 768px) {
             .mobile-menu-btn {
                 display: flex;
+            }
+
+            .focus-exit {
+                top: var(--space-4);
+                right: var(--space-4);
             }
         }
     </style>
@@ -994,6 +1246,10 @@
                     <span class="nav-icon">📅</span>
                     <span class="nav-label">Calendar</span>
                     <span class="nav-badge" id="calendar-badge">→</span>
+                </div>
+                <div class="nav-item focus-nav" data-page="focus" onclick="enterFocusMode()">
+                    <span class="nav-icon">◎</span>
+                    <span class="nav-label">Focus</span>
                 </div>
             </div>
             
@@ -1056,6 +1312,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title"><span>📅</span> Today's Schedule</h2>
+                        <button class="btn btn-focus" onclick="enterFocusMode()">◎ Focus</button>
                     </div>
                     <div id="dashboard-calendar">
                         <div class="empty-state">
@@ -1215,10 +1472,20 @@
             </div>
         </section>
 
+        <section class="page-section" id="page-focus">
+            <div class="focus-container">
+                <button class="focus-exit" onclick="exitFocusMode()" title="Exit focus (Esc)">Exit</button>
+                <div class="focus-content" id="focus-content"></div>
+            </div>
+        </section>
+
         <section class="page-section" id="page-calendar">
             <header class="content-header">
                 <h1 class="content-title">📅 Training Schedule</h1>
-                <button class="btn btn-primary" onclick="generateCalendar()">🔄 Refresh</button>
+                <div style="display: flex; gap: var(--space-3);">
+                    <button class="btn btn-focus" onclick="enterFocusMode()">◎ Focus</button>
+                    <button class="btn btn-primary" onclick="generateCalendar()">🔄 Refresh</button>
+                </div>
             </header>
             <div class="content-body">
                 <div id="calendarResult">
@@ -1296,6 +1563,7 @@
         let projects = [];
         let tasks = [];
         let workSchedule = null;
+        let focusTimer = null;
         
         const ITEMS_PER_PAGE = 5;
 
@@ -1333,11 +1601,17 @@
         }
 
         function showPage(pageId) {
+            if (pageId !== 'focus') {
+                stopFocusTimer();
+                document.body.classList.remove('focus-mode');
+            }
+
             document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             
             document.getElementById('page-' + pageId).classList.add('active');
-            document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+            const navItem = document.querySelector(`[data-page="${pageId}"]`);
+            if (navItem) navItem.classList.add('active');
             
             if (window.innerWidth <= 768) {
                 document.getElementById('sidebar').classList.remove('open');
@@ -1349,6 +1623,190 @@
             
             if (pageId === 'calendar' && tasks.length > 0) {
                 generateCalendar();
+            }
+        }
+
+        function getCalendarData() {
+            const saved = localStorage.getItem('plannerCalendar');
+            if (!saved) return null;
+            try {
+                return JSON.parse(saved);
+            } catch {
+                return null;
+            }
+        }
+
+        function getCurrentMinutes() {
+            const now = new Date();
+            return now.getHours() * 60 + now.getMinutes();
+        }
+
+        function getTodayDateStr() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        function parseTimeToMinutes(timeStr) {
+            const [h, m] = timeStr.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        function getActiveTask(calendarData) {
+            if (!calendarData?.calendar) return null;
+            const day = calendarData.calendar.find(d => d.date === getTodayDateStr());
+            if (!day) return null;
+            const currentMinutes = getCurrentMinutes();
+            return day.tasks.find(task => {
+                if (!task.start_time || !task.end_time) return false;
+                const start = parseTimeToMinutes(task.start_time);
+                const end = parseTimeToMinutes(task.end_time);
+                return currentMinutes >= start && currentMinutes < end;
+            }) || null;
+        }
+
+        function getNextUpcomingTask(calendarData) {
+            if (!calendarData?.calendar) return null;
+            const day = calendarData.calendar.find(d => d.date === getTodayDateStr());
+            if (!day) return null;
+            const currentMinutes = getCurrentMinutes();
+            let next = null;
+            let nextStart = Infinity;
+            day.tasks.forEach(task => {
+                if (!task.start_time || !task.end_time) return;
+                const start = parseTimeToMinutes(task.start_time);
+                if (start > currentMinutes && start < nextStart) {
+                    next = task;
+                    nextStart = start;
+                }
+            });
+            return next;
+        }
+
+        function formatDuration(minutes) {
+            if (minutes <= 0) return '0m';
+            const h = Math.floor(minutes / 60);
+            const m = minutes % 60;
+            if (h === 0) return `${m}m`;
+            if (m === 0) return `${h}h`;
+            return `${h}h ${m}m`;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function renderFocusMode() {
+            const container = document.getElementById('focus-content');
+            const data = getCalendarData();
+
+            if (!data) {
+                container.innerHTML = `
+                    <div class="focus-empty-icon">📅</div>
+                    <div class="focus-empty-title">No schedule yet</div>
+                    <p class="focus-empty-text">Generate your training schedule first, then return here to focus on one task at a time.</p>
+                    <button class="btn btn-primary" onclick="exitFocusMode(); showPage('calendar'); generateCalendar();">Get Schedule</button>
+                `;
+                return;
+            }
+
+            const active = getActiveTask(data);
+
+            if (active) {
+                const endMinutes = parseTimeToMinutes(active.end_time);
+                const remaining = endMinutes - getCurrentMinutes();
+                const completed = active.task.completed;
+
+                container.innerHTML = `
+                    <div class="focus-label"><span class="focus-pulse"></span>Now</div>
+                    <h1 class="focus-task-name">${escapeHtml(active.task.name)}</h1>
+                    <div class="focus-project">${escapeHtml(active.task.project_name)}</div>
+                    <div class="focus-time-block">
+                        <div class="focus-time-range">${active.start_time} – ${active.end_time}</div>
+                        <div class="focus-countdown"><strong>${formatDuration(remaining)}</strong> remaining</div>
+                    </div>
+                    <div class="focus-actions">
+                        ${completed
+                            ? '<span style="color: var(--color-success); font-size: var(--text-sm);">✓ Completed</span>'
+                            : `<button class="focus-done-btn" onclick="completeTaskFromFocus(${active.task.id})">Mark Done</button>`
+                        }
+                    </div>
+                `;
+                return;
+            }
+
+            const next = getNextUpcomingTask(data);
+            container.innerHTML = `
+                <div class="focus-empty-icon">☕</div>
+                <div class="focus-empty-title">Nothing scheduled now</div>
+                <p class="focus-empty-text">${next ? 'Take a breath. Your next session starts soon.' : 'No more tasks on today\'s schedule. Well done.'}</p>
+                ${next ? `
+                    <div class="focus-next">
+                        <div class="focus-next-label">Up next</div>
+                        <div class="focus-next-name">${escapeHtml(next.task.name)}</div>
+                        <div class="focus-next-meta">${escapeHtml(next.task.project_name)} · ${next.start_time} – ${next.end_time} · in ${formatDuration(parseTimeToMinutes(next.start_time) - getCurrentMinutes())}</div>
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        function startFocusTimer() {
+            stopFocusTimer();
+            focusTimer = setInterval(renderFocusMode, 60000);
+        }
+
+        function stopFocusTimer() {
+            if (focusTimer) {
+                clearInterval(focusTimer);
+                focusTimer = null;
+            }
+        }
+
+        function enterFocusMode() {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+            document.getElementById('page-focus').classList.add('active');
+            const focusNav = document.querySelector('[data-page="focus"]');
+            if (focusNav) focusNav.classList.add('active');
+
+            document.body.classList.add('focus-mode');
+
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+
+            renderFocusMode();
+            startFocusTimer();
+        }
+
+        function exitFocusMode() {
+            stopFocusTimer();
+            document.body.classList.remove('focus-mode');
+            showPage('dashboard');
+        }
+
+        async function completeTaskFromFocus(taskId) {
+            const btn = document.querySelector('.focus-done-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Saving…';
+            }
+            try {
+                const response = await fetch(API_URL + 'tasks/' + taskId + '/toggle_complete/', {
+                    method: 'POST'
+                });
+                if (response.ok) {
+                    await loadTasks();
+                    await generateCalendar();
+                    renderFocusMode();
+                }
+            } catch (error) {
+                console.error('Error completing task:', error);
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = 'Mark Done';
+                }
             }
         }
 
@@ -1861,6 +2319,10 @@
                 localStorage.setItem('plannerCalendar', JSON.stringify(data));
                 
                 highlightCurrentTime();
+
+                if (document.getElementById('page-focus').classList.contains('active')) {
+                    renderFocusMode();
+                }
             } catch (error) {
                 console.error('Error generating calendar:', error);
                 container.innerHTML = '<div class="empty-state"><p>Error generating calendar. Please try again.</p></div>';
@@ -1909,6 +2371,9 @@
                 if (response.ok) {
                     loadTasks();
                     generateCalendar();
+                    if (document.getElementById('page-focus').classList.contains('active')) {
+                        renderFocusMode();
+                    }
                 }
             } catch (error) {
                 console.error('Error completing task:', error);
@@ -2093,6 +2558,12 @@
         function closeDayDetailModal() {
             document.getElementById('dayDetailModal').classList.remove('active');
         }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('page-focus').classList.contains('active')) {
+                exitFocusMode();
+            }
+        });
 
         // Close modal on outside click
         document.addEventListener('click', (e) => {
